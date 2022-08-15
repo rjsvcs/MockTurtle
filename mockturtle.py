@@ -38,7 +38,6 @@ def expect(function, *args):
     __EXPECTED.append(Call(function, *args))
 
 def __call(function, *args):
-    print(__testing)
     if __testing:
         global __index
         

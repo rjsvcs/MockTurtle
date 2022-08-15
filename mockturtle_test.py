@@ -36,4 +36,5 @@ def test_square():
     # analyze
     turtle.verify()
 
-test_square()
+if __name__ == "__main__":
+    square(50, 75, 100)
