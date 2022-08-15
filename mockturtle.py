@@ -3,96 +3,169 @@ import turtle
 """
 Mock functions
 """
+class Call:
+    __slots__ = ["__function", "__args"]
 
-def expect(name, *args):
-    pass
+    def __init__(self, function, *args):
+        self.__function = function
+        self.__args = args
 
+    def __str__(self):
+        return str(self.__function.__name__) + str(self.__args)
+
+    def __eq__(self, other):
+        if type(self) is type(other):
+            return self.__function is other.__function and \
+                self.__args == other.__args
+        else:
+            return False
+
+__EXPECTED = []
+__index = 0
+
+def reset():
+    __EXPECTED.clear()
+    global __index
+    __index = 0
+    turtle.reset()
+
+def expect(function, *args):
+    __EXPECTED.append(Call(function, *args))
+
+def __called(function, *args):
+    global __index
+    new_index = __index + 1
+    
+    actual = Call(function, *args)
+    assert new_index < len(__EXPECTED), "Unexpected call: " + str(actual)
+
+    expected = __EXPECTED[new_index]
+    actual = Call(function, *args)
+    assert expected == actual, "Expected: " + str(expected) \
+            + " but was " + str(actual)
+
+    __index = new_index
+
+def verify():
+    difference = len(__EXPECTED) - __index
+    assert difference == 0, "Expected " + str(difference) \
+        + " more calls beginning with " + str(__EXPECTED[__index])
+    
 """
-Turtle functions.
+Other turtle functions.
 """
 def forward(distance):
-    turtle.forward(distance)
+    __called(forward, distance)
+    return turtle.forward(distance)
 
 def fd(distance):
-    turtle.fd(distance)
+    __called(fd, distance)
+    return turtle.fd(distance)
 
 def back(distance):
-    turtle.back(distance)
+    __called(back, distance)
+    return turtle.back(distance)
 
 def bk(distance):
-    turtle.bk(distance)
+    __called(bk, distance)
+    return turtle.bk(distance)
 
 def backward(distance):
-    turtle.backward(distance)
+    __called(backward, distance)
+    return turtle.backward(distance)
 
 def right(angle):
-    turtle.right(angle)
+    __called(right, angle)
+    return turtle.right(angle)
 
 def rt(angle):
-    turtle.rt(angle)
+    __called(rt, angle)
+    return turtle.rt(angle)
 
 def left(angle):
-    turtle.left(angle)
+    __called(left, angle)
+    return turtle.left(angle)
 
 def lt(angle):
-    turtle.lt(angle)
+    __called(lt, angle)
+    return turtle.lt(angle)
 
 def goto(x, y=None):
-    turtle.goto(x, y)
+    __called(goto, x, y)
+    return turtle.goto(x, y)
 
 def setpos(x, y=None):
-    turtle.setpos(x, y)
+    __called(setpos, x, y)
+    return turtle.setpos(x, y)
 
 def setposition(x, y=None):
-    turtle.setposition(x, y)
+    __called(setposition, x, y)
+    return turtle.setposition(x, y)
 
 def setx(x):
-    turtle.setx(x)
+    __called(setx, x)
+    return turtle.setx(x)
 
 def sety(y):
-    turtle.sety(y)
+    __called(sety, y)
+    return turtle.sety(y)
 
 def setheading(to_angle):
-    turtle.setheading(to_angle)
+    __called(setheading, to_angle)
+    return turtle.setheading(to_angle)
 
 def seth(to_angle):
-    turtle.seth(to_angle)
+    __called(seth, to_angle)
+    return turtle.seth(to_angle)
 
 def home():
-    turtle.home()
+    __called(home)
+    return turtle.home()
 
 def circle(radius, extent=None, steps=None):
-    turtle.circle(radius, extent, steps)
+    __called(circle, radius, extent, steps)
+    return turtle.circle(radius, extent, steps)
 
 def dot(size=None, *color):
-    turtle.dot(size, *color)
+    __called(dot, size, *color)
+    return turtle.dot(size, *color)
 
 def stamp():
+    __called(stamp)
     return turtle.stamp()
 
 def clearstamp(stampid):
-    turtle.clearstamp(stampid)
+    __called(clearstamp, stampid)
+    return turtle.clearstamp(stampid)
 
 def clearstamps(n=None):
-    turtle.clearstamps(n)
+    __called(clearstamps, n)
+    return turtle.clearstamps(n)
 
 def undo():
-    turtle.undo()
+    __called(undo)
+    return turtle.undo()
 
-def speed(speed=None):
-    return turtle.speed(speed)
+def speed(spd=None):
+    __called(speed, spd)
+    return turtle.speed(spd)
 
 def position():
+    __called(position)
     return turtle.position()
 
 def pos():
+    __called(pos)
     return turtle.pos()
 
 def towards(x, y=None):
-    turtle.towards(x, y)
+    __called(towards, x, y)
+    return turtle.towards(x, y)
 
+def xcor():
+    __called(xcor)
+    return turtle.xcor()
 
-
-
-
-
+def ycor():
+    __called(ycor)
+    return turtle.ycor()
